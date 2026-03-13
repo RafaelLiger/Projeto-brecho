@@ -4,8 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Brechó Vavá</title>
 
 <link rel="stylesheet" href="style.css">
@@ -16,19 +14,62 @@
 
 <h1>Brechó Vavá</h1>
 
-<h2>Cadastrar produto</h2>
-
-<input id="nome" placeholder="Nome da roupa">
-
-<input id="preco" placeholder="Preço">
-
-<button id="btnCadastrar">Cadastrar</button>
-
-<h2>Produtos cadastrados</h2>
-
 <div id="lista"></div>
 
-<script type="module" src="script.js"></script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
+authDomain: "brechovava.firebaseapp.com",
+projectId: "brechovava",
+storageBucket: "brechovava.firebasestorage.app",
+messagingSenderId: "285901923260",
+appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+async function carregarProdutos(){
+
+let lista = document.getElementById("lista")
+
+lista.innerHTML=""
+
+const querySnapshot = await getDocs(collection(db,"produtos"))
+
+querySnapshot.forEach((doc)=>{
+
+let p = doc.data()
+
+lista.innerHTML += `
+
+<div class="produto">
+
+<img src="${p.foto}" width="200">
+
+<h3>${p.nome}</h3>
+
+<p>R$ ${p.preco}</p>
+
+<a href="https://wa.me/5521999999999">Comprar no WhatsApp</a>
+
+</div>
+
+`
+
+})
+
+}
+
+carregarProdutos()
+
+</script>
 
 </body>
 

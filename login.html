@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Login Admin</title>
+</head>
+
+<body>
+
+<h2>Login do Administrador</h2>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="senha" placeholder="Senha">
+
+<button onclick="login()">Entrar</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
+authDomain: "brechovava.firebaseapp.com",
+projectId: "brechovava",
+storageBucket: "brechovava.firebasestorage.app",
+messagingSenderId: "285901923260",
+appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+window.login = async function(){
+
+let email = document.getElementById("email").value
+let senha = document.getElementById("senha").value
+
+try{
+
+await signInWithEmailAndPassword(auth,email,senha)
+
+window.location.href = "admin.html"
+
+}catch(e){
+
+alert("Email ou senha incorretos")
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
