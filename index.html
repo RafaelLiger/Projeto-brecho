@@ -12,9 +12,58 @@
 
 <body>
 
-<h1>Brechó Varanda</h1>
+<div class="container">
+  <main class="main-content">
+    <header class="site-header">
+      <h1>Brechó Varanda</h1>
+      <!-- Botão Seja um Colaborador -->
+      <button id="btnColaborador" onclick="mostrarFormularioColaborador()">Seja um Colaborador</button>
+    </header>
 
-<div id="lista"></div>
+    <!-- Formulário de Colaboração (inicialmente oculto) -->
+    <div id="formularioColaborador" style="display:none;">
+      <h2>Contribua com um Produto</h2>
+      <label for="nomeProduto">Nome do produto:</label>
+      <input type="text" id="nomeProduto" placeholder="Nome do produto">
+      <label for="tamanhoProduto">Tamanho:</label>
+      <input type="text" id="tamanhoProduto" placeholder="Tamanho">
+      <label for="fotoProduto">Foto do produto:</label>
+      <input type="file" id="fotoProduto" accept="image/*">
+      <button onclick="enviarColaboracao()">Enviar</button>
+      <button onclick="fecharFormulario()">Fechar</button>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <section class="produtos-section">
+      <div id="lista"></div>
+    </section>
+
+    <!-- Seção Moda Circular e Sustentabilidade -->
+    <section id="modaCircular">
+      <h2>Moda Circular e Sustentabilidade</h2>
+      <p>A moda circular é um modelo que visa minimizar o desperdício e o impacto ambiental da indústria da moda, promovendo a reutilização, reciclagem e compartilhamento de roupas.</p>
+      <h3>Impacto Ambiental da Indústria da Moda</h3>
+      <p>A produção de roupas consome grandes quantidades de água e energia, além de gerar poluentes. Segundo a ONU, a moda é responsável por 10% das emissões de carbono globais.</p>
+      <h3>Importância dos Brechós</h3>
+      <p>Os brechós permitem a circulação de peças já produzidas, reduzindo a necessidade de novas manufaturas e incentivando o consumo consciente.</p>
+      <h3>Consumo Consciente e Reutilização</h3>
+      <p>Reutilizar roupas ajuda a preservar recursos naturais e diminui o lixo têxtil. Cada peça reutilizada é uma contribuição para um futuro mais sustentável.</p>
+      <p>Para mais informações, visite: <a href="https://www.un.org/sustainabledevelopment/sustainable-consumption-production/" target="_blank">ONU - Consumo Sustentável</a></p>
+    </section>
+  </main>
+
+  <aside class="sidebar">
+    <!-- Seção Sugestões da Comunidade -->
+    <section id="sugestoes">
+      <h2>Sugestões da Comunidade</h2>
+      <label for="nomeSugestao">Nome:</label>
+      <input type="text" id="nomeSugestao" placeholder="Seu nome">
+      <label for="comentarioSugestao">Sugestão ou comentário:</label>
+      <textarea id="comentarioSugestao" placeholder="Digite sua sugestão"></textarea>
+      <button onclick="enviarSugestao()">Enviar Sugestão</button>
+    </section>
+  </aside>
+</div>
 
 <script type="module">
 
@@ -49,7 +98,7 @@ lista.innerHTML += `
 
 <div class="produto">
 
-<img src="${p.foto}">
+<img src="${p.foto}" alt="${p.nome}">
 
 <h3>${p.nome}</h3>
 
@@ -66,6 +115,76 @@ lista.innerHTML += `
 }
 
 carregarProdutos()
+
+// Funções para colaboração
+window.mostrarFormularioColaborador = function(){
+  document.getElementById("formularioColaborador").style.display = "block";
+}
+
+window.fecharFormulario = function(){
+  document.getElementById("formularioColaborador").style.display = "none";
+}
+
+async function uploadImagem(file){
+  if (!file) return "";
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const resposta = await fetch(
+    "https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
+    { method: "POST", body: formData }
+  );
+
+  const dados = await resposta.json();
+  return dados.data.url;
+}
+
+window.enviarColaboracao = async function(){
+  let nome = document.getElementById("nomeProduto").value;
+  let tamanho = document.getElementById("tamanhoProduto").value;
+  let file = document.getElementById("fotoProduto").files[0];
+
+  if (!nome || !tamanho || !file) {
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  let linkFoto = await uploadImagem(file);
+
+  let mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
+
+  let urlWhatsApp = `https://wa.me/5521999999999?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(urlWhatsApp, "_blank");
+
+  // Limpar formulário
+  document.getElementById("nomeProduto").value = "";
+  document.getElementById("tamanhoProduto").value = "";
+  document.getElementById("fotoProduto").value = "";
+  fecharFormulario();
+}
+
+// Função para sugestões
+window.enviarSugestao = function(){
+  let nome = document.getElementById("nomeSugestao").value;
+  let comentario = document.getElementById("comentarioSugestao").value;
+
+  if (!nome || !comentario) {
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  const assunto = "Sugestão enviada pelo site Brechó Vavá";
+  const corpo = `Nome: ${nome}\n\nSugestão:\n${comentario}`;
+
+  const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+  window.location.href = mailtoLink;
+
+  // Limpar formulário
+  document.getElementById("nomeSugestao").value = "";
+  document.getElementById("comentarioSugestao").value = "";
+}
 
 </script>
 

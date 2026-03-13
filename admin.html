@@ -16,11 +16,16 @@
 
   <button onclick="logout()">Sair</button>
 
-  <h2>Cadastrar produto</h2>
-  <input id="nome" placeholder="Nome da roupa">
-  <input id="preco" placeholder="Preço">
-  <input type="file" id="foto">
-  <button id="btnCadastrar">Cadastrar</button>
+  <div class="form-container">
+    <h2>Cadastrar produto</h2>
+    <label for="nome">Nome da roupa:</label>
+    <input id="nome" placeholder="Nome da roupa">
+    <label for="preco">Preço:</label>
+    <input id="preco" placeholder="Preço">
+    <label for="foto">Foto:</label>
+    <input type="file" id="foto" accept="image/*">
+    <button id="btnCadastrar">Cadastrar</button>
+  </div>
 
   <h2>Produtos cadastrados</h2>
   <div id="lista"></div>

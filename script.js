@@ -79,7 +79,7 @@ async function carregarProdutos() {
 
     lista.innerHTML += `
       <div class="produto">
-        <img src="${p.foto}" width="150">
+        <img src="${p.foto}" width="150" alt="${p.nome}">
         <h3>${p.nome}</h3>
         <p>R$ ${p.preco}</p>
         <button onclick="removerProduto('${id}')">Remover</button>
