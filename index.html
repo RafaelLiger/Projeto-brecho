@@ -94,6 +94,14 @@ querySnapshot.forEach((doc)=>{
 
 let p = doc.data()
 
+const mensagem = `Olá! Tenho interesse neste produto do Brechó.
+
+Produto: ${p.nome}
+Preço: R$ ${p.preco}
+Foto: ${p.foto}`;
+
+const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
+
 lista.innerHTML += `
 
 <div class="produto">
@@ -104,7 +112,9 @@ lista.innerHTML += `
 
 <p>R$ ${p.preco}</p>
 
-<a href="https://wa.me/5521999999999">Comprar no WhatsApp</a>
+<a href="${whatsappLink}" target="_blank" class="btn-whatsapp">
+Comprar pelo WhatsApp
+</a>
 
 </div>
 
@@ -154,7 +164,7 @@ window.enviarColaboracao = async function(){
 
   let mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
 
-  let urlWhatsApp = `https://wa.me/5521999999999?text=${encodeURIComponent(mensagem)}`;
+  let urlWhatsApp = `https://wa.me/5521969400559?text=${encodeURIComponent(mensagem)}`;
 
   window.open(urlWhatsApp, "_blank");
 
