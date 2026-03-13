@@ -1,0 +1,74 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
+  authDomain: "brechovava.firebaseapp.com",
+  projectId: "brechovava",
+  storageBucket: "brechovava.firebasestorage.app",
+  messagingSenderId: "285901923260",
+  appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+
+document.getElementById("btnCadastrar").addEventListener("click", cadastrar);
+
+
+
+async function cadastrar(){
+
+let nome = document.getElementById("nome").value;
+
+let preco = document.getElementById("preco").value;
+
+await addDoc(collection(db,"produtos"),{
+
+nome:nome,
+preco:preco
+
+});
+
+alert("Produto cadastrado");
+
+carregarProdutos();
+
+}
+
+
+
+async function carregarProdutos(){
+
+let lista = document.getElementById("lista");
+
+lista.innerHTML="";
+
+const querySnapshot = await getDocs(collection(db,"produtos"));
+
+querySnapshot.forEach((doc)=>{
+
+let p = doc.data();
+
+lista.innerHTML += `
+
+<div class="produto">
+
+<h3>${p.nome}</h3>
+
+<p>R$ ${p.preco}</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+carregarProdutos();
