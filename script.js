@@ -33,7 +33,6 @@ const auth = getAuth(app)
 
 
 
-//  VERIFICAR LOGIN
 onAuthStateChanged(auth,(user)=>{
 
 if(!user){
@@ -49,7 +48,7 @@ window.location.href = "login.html"
 document.getElementById("btnCadastrar").addEventListener("click", cadastrar)
 
 
-//  UPLOAD IMAGEM
+
 async function uploadImagem(){
 
 const file = document.getElementById("foto").files[0]
@@ -79,7 +78,6 @@ return dados.data.url
 
 
 
-//  CADASTRAR PRODUTO
 async function cadastrar(){
 
 let nome = document.getElementById("nome").value
@@ -104,7 +102,6 @@ carregarProdutos()
 
 
 
-//  REMOVER PRODUTO
 async function removerProduto(id){
 
 await deleteDoc(doc(db,"produtos",id))
@@ -117,7 +114,6 @@ carregarProdutos()
 
 
 
-//  CARREGAR PRODUTOS
 async function carregarProdutos(){
 
 let lista = document.getElementById("lista")
@@ -156,8 +152,8 @@ carregarProdutos()
 
 
 
-// tornar função global
 window.removerProduto = removerProduto
+
 
 
 window.logout = function(){
