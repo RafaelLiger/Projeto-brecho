@@ -1,165 +1,97 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
-import { 
-getFirestore, 
-collection, 
-addDoc, 
-getDocs, 
-deleteDoc, 
-doc 
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-
-
+// Config Firebase
 const firebaseConfig = {
-apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
-authDomain: "brechovava.firebaseapp.com",
-projectId: "brechovava",
-storageBucket: "brechovava.firebasestorage.app",
-messagingSenderId: "285901923260",
-appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+  apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
+  authDomain: "brechovava.firebaseapp.com",
+  projectId: "brechovava",
+  storageBucket: "brechovava.firebasestorage.app",
+  messagingSenderId: "285901923260",
+  appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-const auth = getAuth(app)
+// Verifica login e mostra painel apenas se autenticado
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html"; // redireciona não logados
+  } else {
+    document.getElementById("adminPanel").style.display = "block"; // mostra painel
+    carregarProdutos(); // carrega produtos só depois do login
+  }
+});
 
+// Cadastro de produto
+document.getElementById("btnCadastrar").addEventListener("click", cadastrar);
 
+async function uploadImagem() {
+  const file = document.getElementById("foto").files[0];
+  if (!file) return "";
 
-onAuthStateChanged(auth,(user)=>{
+  const formData = new FormData();
+  formData.append("image", file);
 
-if(!user){
+  const resposta = await fetch(
+    "https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
+    { method: "POST", body: formData }
+  );
 
-window.location.href = "login.html"
-
+  const dados = await resposta.json();
+  return dados.data.url;
 }
 
-})
+async function cadastrar() {
+  let nome = document.getElementById("nome").value;
+  let preco = document.getElementById("preco").value;
+  let linkFoto = await uploadImagem();
 
+  await addDoc(collection(db, "produtos"), {
+    nome: nome,
+    preco: preco,
+    foto: linkFoto
+  });
 
-
-document.getElementById("btnCadastrar").addEventListener("click", cadastrar)
-
-
-
-async function uploadImagem(){
-
-const file = document.getElementById("foto").files[0]
-
-if(!file){
-
-return ""
-
+  alert("Produto cadastrado");
+  carregarProdutos();
 }
 
-const formData = new FormData()
-
-formData.append("image", file)
-
-const resposta = await fetch(
-"https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
-{
-method:"POST",
-body:formData
-})
-
-const dados = await resposta.json()
-
-return dados.data.url
-
+// Remover produto
+async function removerProduto(id) {
+  await deleteDoc(doc(db, "produtos", id));
+  alert("Produto removido");
+  carregarProdutos();
 }
 
+// Carregar produtos
+async function carregarProdutos() {
+  let lista = document.getElementById("lista");
+  lista.innerHTML = "";
 
+  const querySnapshot = await getDocs(collection(db, "produtos"));
+  querySnapshot.forEach((docItem) => {
+    let p = docItem.data();
+    let id = docItem.id;
 
-async function cadastrar(){
-
-let nome = document.getElementById("nome").value
-
-let preco = document.getElementById("preco").value
-
-let linkFoto = await uploadImagem()
-
-await addDoc(collection(db,"produtos"),{
-
-nome:nome,
-preco:preco,
-foto:linkFoto
-
-})
-
-alert("Produto cadastrado")
-
-carregarProdutos()
-
+    lista.innerHTML += `
+      <div class="produto">
+        <img src="${p.foto}" width="150">
+        <h3>${p.nome}</h3>
+        <p>R$ ${p.preco}</p>
+        <button onclick="removerProduto('${id}')">Remover</button>
+      </div>
+    `;
+  });
 }
 
+// Tornar funções globais
+window.removerProduto = removerProduto;
 
-
-async function removerProduto(id){
-
-await deleteDoc(doc(db,"produtos",id))
-
-alert("Produto removido")
-
-carregarProdutos()
-
-}
-
-
-
-async function carregarProdutos(){
-
-let lista = document.getElementById("lista")
-
-lista.innerHTML=""
-
-const querySnapshot = await getDocs(collection(db,"produtos"))
-
-querySnapshot.forEach((docItem)=>{
-
-let p = docItem.data()
-
-let id = docItem.id
-
-lista.innerHTML += `
-
-<div class="produto">
-
-<img src="${p.foto}" width="150">
-
-<h3>${p.nome}</h3>
-
-<p>R$ ${p.preco}</p>
-
-<button onclick="removerProduto('${id}')">Remover</button>
-
-</div>
-
-`
-
-})
-
-}
-
-carregarProdutos()
-
-
-
-window.removerProduto = removerProduto
-
-
-
-window.logout = function(){
-
-signOut(auth)
-
-window.location.href = "login.html"
-
-}
+window.logout = function () {
+  signOut(auth);
+  window.location.href = "login.html";
+};
