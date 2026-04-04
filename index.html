@@ -1,214 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-
-<meta charset="UTF-8">
-<title>Brechó Varanda</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brechó Vavá - Estilo Único, Preço Consciente</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-<div class="container">
-  <main class="main-content">
-    <header class="site-header">
-      <h1>Brechó Varanda</h1>
-      <!-- Botão Seja um Colaborador -->
-      <button id="btnColaborador" onclick="mostrarFormularioColaborador()">Seja um Colaborador</button>
-    </header>
-
-    <!-- Formulário de Colaboração (inicialmente oculto) -->
-    <div id="formularioColaborador" style="display:none;">
-      <h2>Contribua com um Produto</h2>
-      <label for="nomeProduto">Nome do produto:</label>
-      <input type="text" id="nomeProduto" placeholder="Nome do produto">
-      <label for="tamanhoProduto">Tamanho:</label>
-      <input type="text" id="tamanhoProduto" placeholder="Tamanho">
-      <label for="fotoProduto">Foto do produto:</label>
-      <input type="file" id="fotoProduto" accept="image/*">
-      <button onclick="enviarColaboracao()">Enviar</button>
-      <button onclick="fecharFormulario()">Fechar</button>
+  <!-- Header Fixo -->
+  <header class="header">
+    <div class="header-container">
+      <button class="logo" onclick="scrollToSection('hero')">Brechó Vavá</button>
+      
+      <!-- Menu Desktop -->
+      <nav class="nav-menu">
+        <button onclick="scrollToSection('hero')">Início</button>
+        <button onclick="scrollToSection('products')">Produtos</button>
+        <button onclick="scrollToSection('about')">Sobre</button>
+        <button onclick="scrollToSection('contact')">Contato</button>
+      </nav>
+      
+      <!-- Menu Hamburger Mobile -->
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
 
-    <!-- Lista de Produtos -->
-    <section class="produtos-section">
-      <div id="lista"></div>
-    </section>
+    <!-- Menu Mobile -->
+    <nav class="menu-mobile" id="menuMobile">
+      <button onclick="scrollToSection('hero')">Início</button>
+      <button onclick="scrollToSection('products')">Produtos</button>
+      <button onclick="scrollToSection('about')">Sobre</button>
+      <button onclick="scrollToSection('contact')">Contato</button>
+    </nav>
+  </header>
 
-    <!-- Seção Moda Circular e Sustentabilidade -->
-    <section id="modaCircular">
-      <h2>Moda Circular e Sustentabilidade</h2>
-      <p>A moda circular é um modelo que visa minimizar o desperdício e o impacto ambiental da indústria da moda, promovendo a reutilização, reciclagem e compartilhamento de roupas.</p>
-      <h3>Impacto Ambiental da Indústria da Moda</h3>
-      <p>A produção de roupas consome grandes quantidades de água e energia, além de gerar poluentes. Segundo a ONU, a moda é responsável por 10% das emissões de carbono globais.</p>
-      <h3>Importância dos Brechós</h3>
-      <p>Os brechós permitem a circulação de peças já produzidas, reduzindo a necessidade de novas manufaturas e incentivando o consumo consciente.</p>
-      <h3>Consumo Consciente e Reutilização</h3>
-      <p>Reutilizar roupas ajuda a preservar recursos naturais e diminui o lixo têxtil. Cada peça reutilizada é uma contribuição para um futuro mais sustentável.</p>
-      <p>Para mais informações, visite: <a href="https://www.un.org/sustainabledevelopment/sustainable-consumption-production/" target="_blank">ONU - Consumo Sustentável</a></p>
-    </section>
-  </main>
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Estilo único, preço consciente</h1>
+      <p>Descubra peças exclusivas que contam histórias e fazem a diferença</p>
+      <button class="btn btn-primary" onclick="scrollToSection('products')">Ver produtos</button>
+    </div>
+  </section>
 
-  <aside class="sidebar">
-    <!-- Seção Sugestões da Comunidade -->
-    <section id="sugestoes">
-      <h2>Sugestões da Comunidade</h2>
-      <label for="nomeSugestao">Nome:</label>
-      <input type="text" id="nomeSugestao" placeholder="Seu nome">
-      <label for="comentarioSugestao">Sugestão ou comentário:</label>
-      <textarea id="comentarioSugestao" placeholder="Digite sua sugestão"></textarea>
-      <button onclick="enviarSugestao()">Enviar Sugestão</button>
-    </section>
-  </aside>
-</div>
+  <!-- Products Section -->
+  <section id="products" class="products">
+    <div class="container">
+      <div class="section-header">
+        <h2>Nossas Peças</h2>
+        <p>Cada peça tem sua própria história. Encontre a sua e dê um novo significado ao conceito de moda sustentável.</p>
+      </div>
+      <div id="lista" class="products-grid"></div>
+    </div>
+  </section>
 
-<script type="module">
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1466027294893-61e41c365431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21lbiUyMHZpbnRhZ2UlMjBkcmVzcyUyMGhhbmdpbmd8ZW58MXx8fHwxNzc1MzA4MTQ1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Brechó Vavá">
+        </div>
+        <div class="about-content">
+          <h2>Sobre o Brechó Vavá</h2>
+          <p>Somos mais do que um brechó. Somos um movimento em prol da moda sustentável e consciente. Fundado em 2020, o Brechó Vavá nasceu do desejo de oferecer estilo único a preços acessíveis, ao mesmo tempo que contribuímos para um futuro mais sustentável.</p>
+          <p>Nossa curadoria especializada garante que cada peça seja de alta qualidade e carregue uma história especial. Acreditamos que a moda não precisa ser descartável para ser incrível.</p>
+          
+          <div class="values">
+            <div class="value-card">
+              <div class="value-icon">❤️</div>
+              <h3>Paixão por Moda</h3>
+              <p>Cada peça é cuidadosamente selecionada com amor e atenção aos detalhes</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">♻️</div>
+              <h3>Sustentabilidade</h3>
+              <p>Contribuímos para um mundo melhor através da moda circular e consciente</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">👥</div>
+              <h3>Comunidade</h3>
+              <p>Conectamos pessoas que compartilham valores de consumo responsável</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Entre em Contato</h2>
+        <p>Tem alguma dúvida ou sugestão? Estamos aqui para ajudar!</p>
+      </div>
+      
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Informações de Contato</h3>
+          <div class="info-items">
+            <div class="info-item">
+              <div class="info-icon">📍</div>
+              <div>
+                <h4>Endereço</h4>
+                <p>Rua da Moda, 123 - São Paulo, SP</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">📞</div>
+              <div>
+                <h4>Telefone</h4>
+                <p>(11) 98765-4321</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">✉️</div>
+              <div>
+                <h4>E-mail</h4>
+                <p>contato@brechovava.com.br</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="contactName">Nome</label>
+            <input type="text" id="contactName" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">E-mail</label>
+            <input type="email" id="contactEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="contactMessage">Mensagem</label>
+            <textarea id="contactMessage" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+          <div class="form-message" id="formMessage"></div>
+        </form>
+      </div>
+    </div>
+  </section>
 
-const firebaseConfig = {
-apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
-authDomain: "brechovava.firebaseapp.com",
-projectId: "brechovava",
-storageBucket: "brechovava.firebasestorage.app",
-messagingSenderId: "285901923260",
-appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
-};
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Brechó Vavá</h3>
+          <p>Estilo único, preço consciente. Moda sustentável que faz a diferença.</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Links Rápidos</h4>
+          <nav class="footer-nav">
+            <button onclick="scrollToSection('hero')">Início</button>
+            <button onclick="scrollToSection('products')">Produtos</button>
+            <button onclick="scrollToSection('about')">Sobre</button>
+            <button onclick="scrollToSection('contact')">Contato</button>
+          </nav>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Redes Sociais</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram">📱</a>
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="mailto:contato@brechovava.com.br" aria-label="E-mail">✉️</a>
+          </div>
+          <div class="footer-contact">
+            <p>contato@brechovava.com.br</p>
+            <p>(11) 98765-4321</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 Brechó Vavá. Todos os direitos reservados.</p>
+        <p>Feito com ❤️ por Brechó Vavá</p>
+      </div>
+    </div>
+  </footer>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  <script type="module" src="script.js"></script>
 
-async function carregarProdutos(){
-
-let lista = document.getElementById("lista")
-
-lista.innerHTML=""
-
-const querySnapshot = await getDocs(collection(db,"produtos"))
-
-querySnapshot.forEach((doc)=>{
-
-let p = doc.data()
-
-const mensagem = `Olá! Tenho interesse neste produto do Brechó.
-
-Produto: ${p.nome}
-Preço: R$ ${p.preco}
-Foto: ${p.foto}`;
-
-const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
-
-lista.innerHTML += `
-
-<div class="produto">
-
-<img src="${p.foto}" alt="${p.nome}">
-
-<h3>${p.nome}</h3>
-
-<p>R$ ${p.preco}</p>
-
-<a href="${whatsappLink}" target="_blank" class="btn-whatsapp">
-Comprar pelo WhatsApp
-</a>
-
-</div>
-
-`
-
-})
-
-}
-
-carregarProdutos()
-
-// Funções para colaboração
-window.mostrarFormularioColaborador = function(){
-  document.getElementById("formularioColaborador").style.display = "block";
-}
-
-window.fecharFormulario = function(){
-  document.getElementById("formularioColaborador").style.display = "none";
-}
-
-async function uploadImagem(file){
-  if (!file) return "";
-
-  const formData = new FormData();
-  formData.append("image", file);
-
-  const resposta = await fetch(
-    "https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
-    { method: "POST", body: formData }
-  );
-
-  const dados = await resposta.json();
-  return dados.data.url;
-}
-
-window.enviarColaboracao = async function(){
-  let nome = document.getElementById("nomeProduto").value;
-  let tamanho = document.getElementById("tamanhoProduto").value;
-  let file = document.getElementById("fotoProduto").files[0];
-
-  if (!nome || !tamanho || !file) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  let linkFoto = await uploadImagem(file);
-
-  let mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
-
-  let urlWhatsApp = `https://wa.me/5521969400559?text=${encodeURIComponent(mensagem)}`;
-
-  window.open(urlWhatsApp, "_blank");
-
-  // Limpar formulário
-  document.getElementById("nomeProduto").value = "";
-  document.getElementById("tamanhoProduto").value = "";
-  document.getElementById("fotoProduto").value = "";
-  fecharFormulario();
-}
-
-// Função para sugestões
-window.enviarSugestao = function(){
-  let nome = document.getElementById("nomeSugestao").value;
-  let comentario = document.getElementById("comentarioSugestao").value;
-
-  if (!nome || !comentario) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const assunto = "Sugestão enviada pelo site Brechó Vavá";
-  const corpo = `Nome: ${nome}\n\nSugestão:\n${comentario}`;
-
-  const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
-  window.location.href = mailtoLink;
-
-  // Limpar formulário
-  document.getElementById("nomeSugestao").value = "";
-  document.getElementById("comentarioSugestao").value = "";
-}
-
-</script>
-
-<!-- VLibras: acessibilidade em Libras -->
-<div vw class="enabled">
-  <div vw-access-button class="active"></div>
-  <div vw-plugin-wrapper>
-    <div class="vw-plugin-top-wrapper"></div>
+  <!-- VLibras: acessibilidade em Libras -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
   </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
 </body>
 </html>

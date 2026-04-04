@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-// Mantém a mesma configuração Firebase usada no projeto.
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
   authDomain: "brechovava.firebaseapp.com",
@@ -14,121 +14,178 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Carrega os produtos do Firebase Firestore e renderiza o grid.
+// ==============================================
+// PRODUCTS LOADING FROM FIREBASE
+// ==============================================
 async function carregarProdutos() {
   const lista = document.getElementById("lista");
   if (!lista) return;
 
-  lista.innerHTML = "";
+  lista.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Carregando produtos...</p>';
 
-  const querySnapshot = await getDocs(collection(db, "produtos"));
-  querySnapshot.forEach((doc) => {
-    const p = doc.data();
-    const mensagem = `Olá! Tenho interesse neste produto do Brechó.\n\nProduto: ${p.nome}\nPreço: R$ ${p.preco}\nFoto: ${p.foto}`;
-    const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
+  try {
+    const querySnapshot = await getDocs(collection(db, "produtos"));
+    lista.innerHTML = '';
+    
+    querySnapshot.forEach((doc) => {
+      const p = doc.data();
+      const mensagem = `Olá! Tenho interesse neste produto do Brechó.\n\nProduto: ${p.nome}\nPreço: R$ ${p.preco}\nFoto: ${p.foto}`;
+      const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
 
-    lista.innerHTML += `
-      <article class="produto" role="article" aria-label="Produto ${p.nome}">
-        <img src="${p.foto}" alt="Foto do produto ${p.nome}">
-        <div class="produto-body">
+      const productCard = document.createElement('div');
+      productCard.className = 'product-card';
+      productCard.innerHTML = `
+        <div class="product-image">
+          <img src="${p.foto}" alt="Foto do produto ${p.nome}">
+        </div>
+        <div class="product-body">
           <h3>${p.nome}</h3>
-          <p>R$ ${p.preco}</p>
-          <div class="produto-actions">
-            <a class="btn-whatsapp" href="${whatsappLink}" target="_blank" rel="noopener noreferrer">Comprar</a>
+          <div class="product-footer">
+            <span class="price">${p.preco}</span>
+            <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-small">
+              Comprar
+            </a>
           </div>
         </div>
-      </article>
-    `;
-  });
+      `;
+      lista.appendChild(productCard);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar produtos:", error);
+    lista.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #c97b63;">Erro ao carregar produtos. Tente novamente mais tarde.</p>';
+  }
 }
 
+// Load products on page load
 carregarProdutos();
 
-// Controle do menu hamburger em mobile.
-const hamburger = document.getElementById('hamburger');
-const menu = document.querySelector('.menu');
+// ==============================================
+// SMOOTH SCROLL NAVIGATION
+// ==============================================
+window.scrollToSection = function(sectionId) {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    const headerHeight = document.querySelector('.header').offsetHeight;
+    const targetPosition = element.offsetTop - headerHeight;
+    
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth'
+    });
 
-if (hamburger && menu) {
+    // Close mobile menu if open
+    const menuMobile = document.getElementById('menuMobile');
+    if (menuMobile && menuMobile.classList.contains('active')) {
+      menuMobile.classList.remove('active');
+      const hamburger = document.getElementById('hamburger');
+      if (hamburger) {
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    }
+  }
+};
+
+// ==============================================
+// MOBILE MENU TOGGLE
+// ==============================================
+const hamburger = document.getElementById('hamburger');
+const menuMobile = document.getElementById('menuMobile');
+
+if (hamburger && menuMobile) {
   hamburger.addEventListener('click', () => {
     const expanded = hamburger.getAttribute('aria-expanded') === 'true';
     hamburger.setAttribute('aria-expanded', String(!expanded));
     hamburger.classList.toggle('active');
-    menu.classList.toggle('active');
+    menuMobile.classList.toggle('active');
   });
 
+  // Close menu when clicking outside
   document.addEventListener('click', (event) => {
-    if (!event.target.closest('nav') && menu.classList.contains('active')) {
-      menu.classList.remove('active');
+    if (!event.target.closest('header') && menuMobile.classList.contains('active')) {
+      menuMobile.classList.remove('active');
       hamburger.classList.remove('active');
       hamburger.setAttribute('aria-expanded', 'false');
     }
   });
+
+  // Close menu when clicking on a link
+  const menuLinks = menuMobile.querySelectorAll('button');
+  menuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menuMobile.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
 }
 
-// Funções de colaboração permanecem as mesmas para enviar produto via WhatsApp.
-window.mostrarFormularioColaborador = function () {
-  const formulario = document.getElementById("formularioColaborador");
-  if (formulario) {
-    formulario.style.display = "block";
-    formulario.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-};
+// ==============================================
+// CONTACT FORM HANDLING
+// ==============================================
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const message = document.getElementById('contactMessage').value;
+    const formMessage = document.getElementById('formMessage');
 
-window.fecharFormulario = function () {
-  const formulario = document.getElementById("formularioColaborador");
-  if (formulario) formulario.style.display = "none";
-};
+    if (!name || !email || !message) {
+      formMessage.className = 'form-message error';
+      formMessage.textContent = 'Por favor, preencha todos os campos.';
+      return;
+    }
 
-async function uploadImagem(file) {
-  if (!file) return "";
+    // Email pattern validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      formMessage.className = 'form-message error';
+      formMessage.textContent = 'Por favor, insira um e-mail válido.';
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("image", file);
+    // Prepare email message
+    const assunto = "Mensagem do site Brechó Vavá";
+    const corpo = `Nome: ${name}\nE-mail: ${email}\n\nMensagem:\n${message}`;
+    const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
 
-  const resposta = await fetch(
-    "https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
-    { method: "POST", body: formData }
-  );
+    // Show success message
+    formMessage.className = 'form-message success';
+    formMessage.textContent = 'Mensagem preparada! Seu cliente de e-mail será aberto.';
 
-  const dados = await resposta.json();
-  return dados.data.url;
+    // Clear form
+    setTimeout(() => {
+      contactForm.reset();
+      formMessage.textContent = '';
+    }, 2000);
+  });
 }
 
-window.enviarColaboracao = async function () {
-  const nome = document.getElementById("nomeProduto").value;
-  const tamanho = document.getElementById("tamanhoProduto").value;
-  const file = document.getElementById("fotoProduto").files[0];
-
-  if (!nome || !tamanho || !file) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const linkFoto = await uploadImagem(file);
-  const mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
-  const urlWhatsApp = `https://wa.me/5521969400559?text=${encodeURIComponent(mensagem)}`;
-  window.open(urlWhatsApp, "_blank");
-
-  document.getElementById("nomeProduto").value = "";
-  document.getElementById("tamanhoProduto").value = "";
-  document.getElementById("fotoProduto").value = "";
-  window.fecharFormulario();
+// ==============================================
+// ANIMATIONS ON SCROLL
+// ==============================================
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
 };
 
-window.enviarSugestao = function () {
-  const nome = document.getElementById("nomeSugestao").value;
-  const comentario = document.getElementById("comentarioSugestao").value;
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('fade-in');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
 
-  if (!nome || !comentario) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const assunto = "Sugestão enviada pelo site Brechó Vavá";
-  const corpo = `Nome: ${nome}\n\nSugestão:\n${comentario}`;
-  const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
-  window.location.href = mailtoLink;
-
-  document.getElementById("nomeSugestao").value = "";
-  document.getElementById("comentarioSugestao").value = "";
-};
+// Observe product cards and value cards
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.product-card, .value-card, .info-item');
+  cards.forEach(card => observer.observe(card));
+});

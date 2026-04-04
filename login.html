@@ -1,69 +1,404 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8">
-<title>Login Admin</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin - Brechó Vavá</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      animation: slideUp 0.6s ease;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 3rem 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h1 {
+      font-size: 1.875rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: var(--white);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: #9ca3af;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
+    }
+
+    .login-button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: none;
+      border-left: 4px solid #b91c1c;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: shake 0.4s ease;
+    }
+
+    .success-message {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: none;
+      border-left: 4px solid #059669;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideUp 0.4s ease;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .login-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .login-footer a:hover {
+      color: var(--primary-dark);
+    }
+
+    .input-loading {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .login-header h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Brechó Vavá</h1>
+        <p>Painel do Administrador</p>
+      </div>
 
-<div class="form-container">
-  <h2>Login do Administrador</h2>
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
 
-  <label for="email">Email</label>
-  <input type="email" id="email" placeholder="Email">
-  <label for="senha">Senha</label>
-  <input type="password" id="senha" placeholder="Senha">
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input 
+            type="email" 
+            id="email" 
+            placeholder="seu@email.com" 
+            required
+            autofocus
+          >
+        </div>
 
-  <button onclick="login()">Entrar</button>
-</div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input 
+            type="password" 
+            id="senha" 
+            placeholder="Sua senha segura" 
+            required
+          >
+        </div>
 
-<script type="module">
+        <button type="submit" class="login-button" id="loginBtn">
+          Entrar
+        </button>
+      </form>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+      <div class="login-footer">
+        <p>Problemas ao fazer login? Entre em contato com o suporte.</p>
+      </div>
+    </div>
+  </div>
 
-import {
-getAuth,
-signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
+      authDomain: "brechovava.firebaseapp.com",
+      projectId: "brechovava",
+      storageBucket: "brechovava.firebasestorage.app",
+      messagingSenderId: "285901923260",
+      appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+    };
 
-const firebaseConfig = {
-apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
-authDomain: "brechovava.firebaseapp.com",
-projectId: "brechovava",
-storageBucket: "brechovava.firebasestorage.app",
-messagingSenderId: "285901923260",
-appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
-};
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const senhaInput = document.getElementById('senha');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
 
-const auth = getAuth(app);
+    window.handleLogin = async function(event) {
+      event.preventDefault();
 
+      const email = emailInput.value.trim();
+      const senha = senhaInput.value;
 
-window.login = async function(){
+      // Validação básica
+      if (!email || !senha) {
+        showError('Por favor, preencha todos os campos');
+        return;
+      }
 
-let email = document.getElementById("email").value
-let senha = document.getElementById("senha").value
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Por favor, insira um e-mail válido');
+        return;
+      }
 
-try{
+      // Desabilitar botão durante requisição
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="loading-spinner"></span>Entrando...';
+      emailInput.classList.add('input-loading');
+      senhaInput.classList.add('input-loading');
 
-await signInWithEmailAndPassword(auth,email,senha)
+      try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        
+        showSuccess('Login realizado com sucesso!');
+        
+        // Aguardar animação antes de redirecionar
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 1000);
 
-window.location.href = "admin.html"
+      } catch (error) {
+        console.error('Erro ao fazer login:', error);
 
-}catch(e){
+        let mensagem = 'Erro ao fazer login. Tente novamente.';
+        
+        if (error.code === 'auth/user-not-found') {
+          mensagem = 'E-mail não encontrado';
+        } else if (error.code === 'auth/wrong-password') {
+          mensagem = 'Senha incorreta';
+        } else if (error.code === 'auth/invalid-email') {
+          mensagem = 'E-mail inválido';
+        } else if (error.code === 'auth/user-disabled') {
+          mensagem = 'Esta conta foi desabilitada';
+        } else if (error.code === 'auth/too-many-requests') {
+          mensagem = 'Muitas tentativas de login. Tente novamente mais tarde';
+        }
 
-alert("Email ou senha incorretos")
+        showError(mensagem);
 
-}
+        // Reabilitar botão
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = 'Entrar';
+        emailInput.classList.remove('input-loading');
+        senhaInput.classList.remove('input-loading');
+      }
+    };
 
-}
+    function showError(message) {
+      errorMessage.textContent = '⚠️ ' + message;
+      errorMessage.classList.add('show');
+      successMessage.classList.remove('show');
+      
+      // Auto-hide error after 5 seconds
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 5000);
+    }
 
-</script>
+    function showSuccess(message) {
+      successMessage.textContent = '✓ ' + message;
+      successMessage.classList.add('show');
+      errorMessage.classList.remove('show');
+    }
 
+    // Limpar mensagem de erro ao focar nos inputs
+    emailInput.addEventListener('focus', () => {
+      errorMessage.classList.remove('show');
+    });
+
+    senhaInput.addEventListener('focus', () => {
+      errorMessage.classList.remove('show');
+    });
+
+    // Password visibility toggle
+    const senhaContainer = senhaInput.parentElement;
+    const toggleButton = document.createElement('button');
+    toggleButton.type = 'button';
+    toggleButton.style.cssText = `
+      position: absolute;
+      right: 12px;
+      top: 38px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: 1.2rem;
+      padding: 0;
+      transition: color 0.3s ease;
+    `;
+    
+    toggleButton.addEventListener('mouseenter', () => toggleButton.style.color = 'var(--primary)');
+    toggleButton.addEventListener('mouseleave', () => toggleButton.style.color = 'var(--text-light)');
+
+    senhaContainer.style.position = 'relative';
+    senhaContainer.appendChild(toggleButton);
+
+    toggleButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (senhaInput.type === 'password') {
+        senhaInput.type = 'text';
+        
+      } else {
+        senhaInput.type = 'password';
+        
+      }
+    });
+  </script>
 </body>
+
 </html>
