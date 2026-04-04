@@ -1,214 +1,218 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-BR">
 <head>
-
-<meta charset="UTF-8">
-<title>Brechó Varanda</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brechó Vavá - moda sustentável e consciente com peças exclusivas e atendimento via WhatsApp.">
+  <title>Brechó Vavá</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <header class="site-header" role="banner">
+    <nav class="top-nav" aria-label="Menu principal">
+      <a class="brand" href="#inicio">Brechó Vavá</a>
+      <div class="nav-actions">
+        <button class="secondary-button" id="btnColaborador" onclick="mostrarFormularioColaborador()" aria-label="Abrir formulário de colaboração">Seja um Colaborador</button>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-controls="main-menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      <ul class="menu" id="main-menu" role="menubar">
+        <li role="none"><a role="menuitem" href="#inicio">Início</a></li>
+        <li role="none"><a role="menuitem" href="#produtos">Produtos</a></li>
+        <li role="none"><a role="menuitem" href="#sobre">Sobre</a></li>
+        <li role="none"><a role="menuitem" href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<div class="container">
-  <main class="main-content">
-    <header class="site-header">
-      <h1>Brechó Varanda</h1>
-      <!-- Botão Seja um Colaborador -->
-      <button id="btnColaborador" onclick="mostrarFormularioColaborador()">Seja um Colaborador</button>
-    </header>
-
-    <!-- Formulário de Colaboração (inicialmente oculto) -->
-    <div id="formularioColaborador" style="display:none;">
-      <h2>Contribua com um Produto</h2>
-      <label for="nomeProduto">Nome do produto:</label>
-      <input type="text" id="nomeProduto" placeholder="Nome do produto">
-      <label for="tamanhoProduto">Tamanho:</label>
-      <input type="text" id="tamanhoProduto" placeholder="Tamanho">
-      <label for="fotoProduto">Foto do produto:</label>
-      <input type="file" id="fotoProduto" accept="image/*">
-      <button onclick="enviarColaboracao()">Enviar</button>
-      <button onclick="fecharFormulario()">Fechar</button>
-    </div>
-
-    <!-- Lista de Produtos -->
-    <section class="produtos-section">
-      <div id="lista"></div>
+  <main>
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="hero-label">Brechó Vavá</p>
+        <h1 id="hero-title">Estilo único, preço consciente</h1>
+        <p class="hero-description">Descubra peças exclusivas que contam histórias e fazem a diferença.</p>
+        <div class="hero-buttons">
+          <a href="#produtos" class="cta-button">Ver produtos</a>
+          <button class="secondary-button" onclick="mostrarFormularioColaborador()">Quero colaborar</button>
+        </div>
+        <div class="scroll-indicator" aria-hidden="true"><span></span></div>
+      </div>
     </section>
 
-    <!-- Seção Moda Circular e Sustentabilidade -->
-    <section id="modaCircular">
-      <h2>Moda Circular e Sustentabilidade</h2>
-      <p>A moda circular é um modelo que visa minimizar o desperdício e o impacto ambiental da indústria da moda, promovendo a reutilização, reciclagem e compartilhamento de roupas.</p>
-      <h3>Impacto Ambiental da Indústria da Moda</h3>
-      <p>A produção de roupas consome grandes quantidades de água e energia, além de gerar poluentes. Segundo a ONU, a moda é responsável por 10% das emissões de carbono globais.</p>
-      <h3>Importância dos Brechós</h3>
-      <p>Os brechós permitem a circulação de peças já produzidas, reduzindo a necessidade de novas manufaturas e incentivando o consumo consciente.</p>
-      <h3>Consumo Consciente e Reutilização</h3>
-      <p>Reutilizar roupas ajuda a preservar recursos naturais e diminui o lixo têxtil. Cada peça reutilizada é uma contribuição para um futuro mais sustentável.</p>
-      <p>Para mais informações, visite: <a href="https://www.un.org/sustainabledevelopment/sustainable-consumption-production/" target="_blank">ONU - Consumo Sustentável</a></p>
+    <section id="formularioColaborador" class="section colaborador" aria-labelledby="colab-title">
+      <div class="section-header">
+        <p class="section-subtitle">Seja colaborador</p>
+        <h2 id="colab-title">Envie seu produto via WhatsApp</h2>
+      </div>
+      <div class="collab-panel">
+        <label for="nomeProduto">Nome do produto</label>
+        <input type="text" id="nomeProduto" placeholder="Nome do produto" required>
+
+        <label for="tamanhoProduto">Tamanho</label>
+        <input type="text" id="tamanhoProduto" placeholder="Tamanho" required>
+
+        <label for="fotoProduto">Foto do produto</label>
+        <input type="file" id="fotoProduto" accept="image/*" aria-label="Escolher foto do produto" required>
+
+        <div class="collab-actions">
+          <button type="button" class="primary-button" onclick="enviarColaboracao()">Enviar colaboração</button>
+          <button type="button" class="secondary-button" onclick="fecharFormulario()">Fechar</button>
+        </div>
+      </div>
     </section>
+
+    <section id="produtos" class="section produtos" aria-labelledby="produtos-title">
+      <div class="section-header">
+        <p class="section-subtitle">Nossas peças</p>
+        <h2 id="produtos-title">Produtos com história</h2>
+        <p class="section-text">Cada peça tem sua própria história. Encontre a sua e dê um novo significado ao conceito de moda sustentável.</p>
+      </div>
+      <div id="lista" class="produtos-grid" aria-live="polite" aria-label="Lista de produtos"></div>
+    </section>
+
+    <section id="sobre" class="section sobre" aria-labelledby="sobre-title">
+      <div class="sobre-grid">
+        <div class="sobre-card">
+          <img src="https://via.placeholder.com/800x700?text=Moda+Sustentável" alt="Imagem de brechó com roupas vintage" loading="lazy">
+        </div>
+        <div class="sobre-texto">
+          <span class="eyebrow">Sobre o Brechó Vavá</span>
+          <h2 id="sobre-title">Moda circular com propósito</h2>
+          <p>Somos mais do que um brechó. Somos um movimento em prol da moda sustentável e consciente. Fundado em 2020, o Brechó Vavá nasceu do desejo de oferecer estilo único a preços acessíveis, ao mesmo tempo que contribuímos para um futuro mais sustentável.</p>
+          <p>Nossa curadoria especializada garante que cada peça seja de alta qualidade e carregue uma história especial. Acreditamos que a moda não precisa ser descartável para ser incrível.</p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <span class="feature-icon">❤️</span>
+              <div>
+                <h3>Paixão por Moda</h3>
+                <p>Cada peça é cuidadosamente selecionada com amor e atenção aos detalhes.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">♻️</span>
+              <div>
+                <h3>Sustentabilidade</h3>
+                <p>Contribuímos para um mundo melhor através da moda circular e consciente.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">👥</span>
+              <div>
+                <h3>Comunidade</h3>
+                <p>Conectamos pessoas que compartilham valores de consumo responsável.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="section contato" aria-labelledby="contato-title">
+      <div class="section-header">
+        <p class="section-subtitle">Fale conosco</p>
+        <h2 id="contato-title">Entre em contato</h2>
+        <p class="section-text">Tem alguma dúvida ou sugestão? Estamos aqui para ajudar!</p>
+      </div>
+      <div class="contato-grid">
+        <div class="contato-info">
+          <div class="info-card">
+            <span class="info-icon">📍</span>
+            <div>
+              <h3>Endereço</h3>
+              <p>Rua da Moda, 123 - São Paulo, SP</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon">📞</span>
+            <div>
+              <h3>Telefone</h3>
+              <p>(11) 98765-4321</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon">✉️</span>
+            <div>
+              <h3>E-mail</h3>
+              <p>contato@brechovava.com.br</p>
+            </div>
+          </div>
+          <div class="schedule-card">
+            <h3>Horário de Funcionamento</h3>
+            <p>Segunda a Sexta: 9h às 19h</p>
+            <p>Sábado: 10h às 18h</p>
+            <p>Domingo: Fechado</p>
+          </div>
+        </div>
+        <div class="contato-form-card">
+          <form id="contactForm" aria-labelledby="contact-form-title" onsubmit="event.preventDefault();">
+            <h3 id="contact-form-title">Enviar mensagem</h3>
+            <label for="nomeContato">Nome</label>
+            <input type="text" id="nomeContato" name="nomeContato" placeholder="Seu nome completo" required>
+
+            <label for="emailContato">E-mail</label>
+            <input type="email" id="emailContato" name="emailContato" placeholder="seu@email.com" required>
+
+            <label for="mensagemContato">Mensagem</label>
+            <textarea id="mensagemContato" name="mensagemContato" rows="5" placeholder="Como podemos ajudar você?" required></textarea>
+
+            <button type="submit" class="primary-button">Enviar mensagem</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <aside class="section sugestoes" aria-labelledby="sugestoes-title">
+      <div class="section-header">
+        <p class="section-subtitle">Sugestões da Comunidade</p>
+        <h2 id="sugestoes-title">Participe com sua ideia</h2>
+        <p class="section-text">Envie sua sugestão diretamente para nosso email para melhorar o brechó.</p>
+      </div>
+      <form id="sugestoesForm" class="suggestion-form" aria-label="Formulário de sugestões">
+        <label for="nomeSugestao">Nome</label>
+        <input type="text" id="nomeSugestao" name="nomeSugestao" placeholder="Seu nome" required>
+
+        <label for="comentarioSugestao">Sugestão</label>
+        <textarea id="comentarioSugestao" name="comentarioSugestao" rows="4" placeholder="Digite sua sugestão" required></textarea>
+
+        <button type="button" class="secondary-button" onclick="enviarSugestao()">Enviar sugestão</button>
+      </form>
+    </aside>
   </main>
 
-  <aside class="sidebar">
-    <!-- Seção Sugestões da Comunidade -->
-    <section id="sugestoes">
-      <h2>Sugestões da Comunidade</h2>
-      <label for="nomeSugestao">Nome:</label>
-      <input type="text" id="nomeSugestao" placeholder="Seu nome">
-      <label for="comentarioSugestao">Sugestão ou comentário:</label>
-      <textarea id="comentarioSugestao" placeholder="Digite sua sugestão"></textarea>
-      <button onclick="enviarSugestao()">Enviar Sugestão</button>
-    </section>
-  </aside>
-</div>
+  <a class="whatsapp-float" href="https://wa.me/5521969400559" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp">
+    <span>💬</span>
+  </a>
 
-<script type="module">
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div>
+        <h2>Brechó Vavá</h2>
+        <p>Moda sustentável com estilo único e consciência ambiental.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#inicio">Início</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+    <p class="footer-copy">© 2026 Brechó Vavá. Todos os direitos reservados.</p>
+  </footer>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  <script type="module" src="script.js"></script>
 
-const firebaseConfig = {
-apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
-authDomain: "brechovava.firebaseapp.com",
-projectId: "brechovava",
-storageBucket: "brechovava.firebasestorage.app",
-messagingSenderId: "285901923260",
-appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-async function carregarProdutos(){
-
-let lista = document.getElementById("lista")
-
-lista.innerHTML=""
-
-const querySnapshot = await getDocs(collection(db,"produtos"))
-
-querySnapshot.forEach((doc)=>{
-
-let p = doc.data()
-
-const mensagem = `Olá! Tenho interesse neste produto do Brechó.
-
-Produto: ${p.nome}
-Preço: R$ ${p.preco}
-Foto: ${p.foto}`;
-
-const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
-
-lista.innerHTML += `
-
-<div class="produto">
-
-<img src="${p.foto}" alt="${p.nome}">
-
-<h3>${p.nome}</h3>
-
-<p>R$ ${p.preco}</p>
-
-<a href="${whatsappLink}" target="_blank" class="btn-whatsapp">
-Comprar pelo WhatsApp
-</a>
-
-</div>
-
-`
-
-})
-
-}
-
-carregarProdutos()
-
-// Funções para colaboração
-window.mostrarFormularioColaborador = function(){
-  document.getElementById("formularioColaborador").style.display = "block";
-}
-
-window.fecharFormulario = function(){
-  document.getElementById("formularioColaborador").style.display = "none";
-}
-
-async function uploadImagem(file){
-  if (!file) return "";
-
-  const formData = new FormData();
-  formData.append("image", file);
-
-  const resposta = await fetch(
-    "https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b",
-    { method: "POST", body: formData }
-  );
-
-  const dados = await resposta.json();
-  return dados.data.url;
-}
-
-window.enviarColaboracao = async function(){
-  let nome = document.getElementById("nomeProduto").value;
-  let tamanho = document.getElementById("tamanhoProduto").value;
-  let file = document.getElementById("fotoProduto").files[0];
-
-  if (!nome || !tamanho || !file) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  let linkFoto = await uploadImagem(file);
-
-  let mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
-
-  let urlWhatsApp = `https://wa.me/5521969400559?text=${encodeURIComponent(mensagem)}`;
-
-  window.open(urlWhatsApp, "_blank");
-
-  // Limpar formulário
-  document.getElementById("nomeProduto").value = "";
-  document.getElementById("tamanhoProduto").value = "";
-  document.getElementById("fotoProduto").value = "";
-  fecharFormulario();
-}
-
-// Função para sugestões
-window.enviarSugestao = function(){
-  let nome = document.getElementById("nomeSugestao").value;
-  let comentario = document.getElementById("comentarioSugestao").value;
-
-  if (!nome || !comentario) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const assunto = "Sugestão enviada pelo site Brechó Vavá";
-  const corpo = `Nome: ${nome}\n\nSugestão:\n${comentario}`;
-
-  const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
-  window.location.href = mailtoLink;
-
-  // Limpar formulário
-  document.getElementById("nomeSugestao").value = "";
-  document.getElementById("comentarioSugestao").value = "";
-}
-
-</script>
-
-<!-- VLibras: acessibilidade em Libras -->
-<div vw class="enabled">
-  <div vw-access-button class="active"></div>
-  <div vw-plugin-wrapper>
-    <div class="vw-plugin-top-wrapper"></div>
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
   </div>
-</div>
-<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-<script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
-</script>
-
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  </script>
 </body>
 </html>

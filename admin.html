@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Admin - Brechó Vavá</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Painel administrativo do Brechó Vavá para cadastro e remoção de produtos.">
+  <title>Painel Admin - Brechó Vavá</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <main class="admin-page" role="main">
+    <section id="adminPanel" class="admin-panel" aria-labelledby="admin-title">
+      <header class="admin-header">
+        <div>
+          <h1 id="admin-title">Painel do Administrador</h1>
+          <p>Gerencie produtos e visualize itens cadastrados.</p>
+        </div>
+        <button class="secondary-button" onclick="logout()" aria-label="Sair do painel">Sair</button>
+      </header>
 
-<!-- Painel do admin escondido por padrão -->
-<div id="adminPanel" style="display:none">
-  <h1>Painel do Administrador</h1>
+      <div class="admin-grid">
+        <div class="admin-form-card">
+          <h2>Cadastrar produto</h2>
+          <label for="nome">Nome da roupa:</label>
+          <input id="nome" placeholder="Nome da roupa" required>
 
-  <button onclick="logout()">Sair</button>
+          <label for="preco">Preço:</label>
+          <input id="preco" placeholder="Preço" required>
 
-  <div class="form-container">
-    <h2>Cadastrar produto</h2>
-    <label for="nome">Nome da roupa:</label>
-    <input id="nome" placeholder="Nome da roupa">
-    <label for="preco">Preço:</label>
-    <input id="preco" placeholder="Preço">
-    <label for="foto">Foto:</label>
-    <input type="file" id="foto" accept="image/*">
-    <button id="btnCadastrar">Cadastrar</button>
-  </div>
+          <label for="foto">Foto:</label>
+          <input type="file" id="foto" accept="image/*" aria-label="Escolher imagem do produto">
 
-  <h2>Produtos cadastrados</h2>
-  <div id="lista"></div>
-</div>
+          <button id="btnCadastrar" class="primary-button">Cadastrar</button>
+        </div>
 
-<script type="module" src="script.js"></script>
+        <div class="admin-list-card">
+          <h2>Produtos cadastrados</h2>
+          <div id="lista" class="admin-product-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

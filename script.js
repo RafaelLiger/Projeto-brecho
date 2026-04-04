@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-// Config Firebase
+// Mantém a mesma configuração Firebase usada no projeto.
 const firebaseConfig = {
   apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
   authDomain: "brechovava.firebaseapp.com",
@@ -14,23 +13,73 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-// Verifica login e mostra painel apenas se autenticado
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html"; // redireciona não logados
-  } else {
-    document.getElementById("adminPanel").style.display = "block"; // mostra painel
-    carregarProdutos(); // carrega produtos só depois do login
+// Carrega os produtos do Firebase Firestore e renderiza o grid.
+async function carregarProdutos() {
+  const lista = document.getElementById("lista");
+  if (!lista) return;
+
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "produtos"));
+  querySnapshot.forEach((doc) => {
+    const p = doc.data();
+    const mensagem = `Olá! Tenho interesse neste produto do Brechó.\n\nProduto: ${p.nome}\nPreço: R$ ${p.preco}\nFoto: ${p.foto}`;
+    const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
+
+    lista.innerHTML += `
+      <article class="produto" role="article" aria-label="Produto ${p.nome}">
+        <img src="${p.foto}" alt="Foto do produto ${p.nome}">
+        <div class="produto-body">
+          <h3>${p.nome}</h3>
+          <p>R$ ${p.preco}</p>
+          <div class="produto-actions">
+            <a class="btn-whatsapp" href="${whatsappLink}" target="_blank" rel="noopener noreferrer">Comprar</a>
+          </div>
+        </div>
+      </article>
+    `;
+  });
+}
+
+carregarProdutos();
+
+// Controle do menu hamburger em mobile.
+const hamburger = document.getElementById('hamburger');
+const menu = document.querySelector('.menu');
+
+if (hamburger && menu) {
+  hamburger.addEventListener('click', () => {
+    const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', String(!expanded));
+    hamburger.classList.toggle('active');
+    menu.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('nav') && menu.classList.contains('active')) {
+      menu.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+// Funções de colaboração permanecem as mesmas para enviar produto via WhatsApp.
+window.mostrarFormularioColaborador = function () {
+  const formulario = document.getElementById("formularioColaborador");
+  if (formulario) {
+    formulario.style.display = "block";
+    formulario.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-});
+};
 
-// Cadastro de produto
-document.getElementById("btnCadastrar").addEventListener("click", cadastrar);
+window.fecharFormulario = function () {
+  const formulario = document.getElementById("formularioColaborador");
+  if (formulario) formulario.style.display = "none";
+};
 
-async function uploadImagem() {
-  const file = document.getElementById("foto").files[0];
+async function uploadImagem(file) {
   if (!file) return "";
 
   const formData = new FormData();
@@ -45,53 +94,41 @@ async function uploadImagem() {
   return dados.data.url;
 }
 
-async function cadastrar() {
-  let nome = document.getElementById("nome").value;
-  let preco = document.getElementById("preco").value;
-  let linkFoto = await uploadImagem();
+window.enviarColaboracao = async function () {
+  const nome = document.getElementById("nomeProduto").value;
+  const tamanho = document.getElementById("tamanhoProduto").value;
+  const file = document.getElementById("fotoProduto").files[0];
 
-  await addDoc(collection(db, "produtos"), {
-    nome: nome,
-    preco: preco,
-    foto: linkFoto
-  });
+  if (!nome || !tamanho || !file) {
+    alert("Preencha todos os campos");
+    return;
+  }
 
-  alert("Produto cadastrado");
-  carregarProdutos();
-}
+  const linkFoto = await uploadImagem(file);
+  const mensagem = `Olá! Gostaria de colaborar com o Brechó Vavá.\n\nProduto: ${nome}\nTamanho: ${tamanho}\nFoto: ${linkFoto}`;
+  const urlWhatsApp = `https://wa.me/5521969400559?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, "_blank");
 
-// Remover produto
-async function removerProduto(id) {
-  await deleteDoc(doc(db, "produtos", id));
-  alert("Produto removido");
-  carregarProdutos();
-}
+  document.getElementById("nomeProduto").value = "";
+  document.getElementById("tamanhoProduto").value = "";
+  document.getElementById("fotoProduto").value = "";
+  window.fecharFormulario();
+};
 
-// Carregar produtos
-async function carregarProdutos() {
-  let lista = document.getElementById("lista");
-  lista.innerHTML = "";
+window.enviarSugestao = function () {
+  const nome = document.getElementById("nomeSugestao").value;
+  const comentario = document.getElementById("comentarioSugestao").value;
 
-  const querySnapshot = await getDocs(collection(db, "produtos"));
-  querySnapshot.forEach((docItem) => {
-    let p = docItem.data();
-    let id = docItem.id;
+  if (!nome || !comentario) {
+    alert("Preencha todos os campos");
+    return;
+  }
 
-    lista.innerHTML += `
-      <div class="produto">
-        <img src="${p.foto}" width="150" alt="${p.nome}">
-        <h3>${p.nome}</h3>
-        <p>R$ ${p.preco}</p>
-        <button onclick="removerProduto('${id}')">Remover</button>
-      </div>
-    `;
-  });
-}
+  const assunto = "Sugestão enviada pelo site Brechó Vavá";
+  const corpo = `Nome: ${nome}\n\nSugestão:\n${comentario}`;
+  const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+  window.location.href = mailtoLink;
 
-// Tornar funções globais
-window.removerProduto = removerProduto;
-
-window.logout = function () {
-  signOut(auth);
-  window.location.href = "login.html";
+  document.getElementById("nomeSugestao").value = "";
+  document.getElementById("comentarioSugestao").value = "";
 };
