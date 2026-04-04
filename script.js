@@ -27,9 +27,18 @@ async function carregarProdutos() {
     const querySnapshot = await getDocs(collection(db, "produtos"));
     lista.innerHTML = '';
     
+    const formatarPrecoBRL = (valor) => {
+      const numero = Number(String(valor).replace(/\./g, '').replace(',', '.')) || 0;
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(numero);
+    };
+
     querySnapshot.forEach((doc) => {
       const p = doc.data();
-      const mensagem = `Olá! Tenho interesse neste produto do Brechó.\n\nProduto: ${p.nome}\nPreço: R$ ${p.preco}\nFoto: ${p.foto}`;
+      const precoFormatado = formatarPrecoBRL(p.preco);
+      const mensagem = `Olá! Tenho interesse neste produto do Brechó.\n\nProduto: ${p.nome}\nPreço: ${precoFormatado}\nFoto: ${p.foto}`;
       const whatsappLink = "https://wa.me/5521969400559?text=" + encodeURIComponent(mensagem);
 
       const productCard = document.createElement('div');
@@ -41,9 +50,10 @@ async function carregarProdutos() {
         <div class="product-body">
           <h3>${p.nome}</h3>
           <div class="product-footer">
-            <span class="price">${p.preco}</span>
+            <span class="price">${precoFormatado}</span>
             <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-small">
               Comprar
+              <img src="icons8-whatsapp.svg" alt="WhatsApp" class="btn-icon">
             </a>
           </div>
         </div>
