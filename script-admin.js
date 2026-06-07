@@ -58,8 +58,15 @@ window.logout = async function() {
 async function uploadImagem(file) {
   if (!file) return '';
 
+  console.log('Arquivo:', file);
+  console.log('Iniciando upload');
+
+  const base64Image = await fileToBase64(file);
+  const imageData = base64Image.split(',')[1] || base64Image;
+
   const formData = new FormData();
-  formData.append('image', file);
+  formData.append('image', imageData);
+  formData.append('name', file.name);
 
   try {
     console.log('Upload ImgBB iniciado para arquivo:', file.name, file.type, file.size);
@@ -69,13 +76,17 @@ async function uploadImagem(file) {
     );
     const data = await response.json();
 
+    console.log('Resposta:', data);
+
     if (!response.ok) {
       console.error('ImgBB response error:', response.status, response.statusText, data);
       throw new Error(`Erro no upload da imagem: ${response.status} ${response.statusText}`);
     }
 
-    if (data && data.success) {
-      return data.data.url;
+    if (data && data.success && data.data && data.data.url) {
+      const imageUrl = data.data.url;
+      console.log('URL final:', imageUrl);
+      return imageUrl;
     } else {
       console.error('ImgBB returned invalid response:', data);
       throw new Error('Erro ao fazer upload da imagem');
@@ -84,6 +95,15 @@ async function uploadImagem(file) {
     console.error('Erro no upload:', error);
     throw error;
   }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
 }
 
 // ==============================================
