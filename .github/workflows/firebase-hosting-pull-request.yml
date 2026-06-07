@@ -16,5 +16,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BRECHOVAVA }}
-          projectId: brechovava
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BRECHOMR_B3541 }}
+          projectId: brechomr-b3541

@@ -4,12 +4,12 @@ import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https
 
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB5iVkMUSZ-0FHF5sdNZB3wsm1qluLpDO8",
-  authDomain: "brechovava.firebaseapp.com",
-  projectId: "brechovava",
-  storageBucket: "brechovava.firebasestorage.app",
-  messagingSenderId: "285901923260",
-  appId: "1:285901923260:web:0fef96eb59e5d6a6bdc1b9"
+  apiKey: "AIzaSyDzakWqr9BV14O2MooLmd6Y4JZGnd8_Uus",
+  authDomain: "brechomr-b3541.firebaseapp.com",
+  projectId: "brechomr-b3541",
+  storageBucket: "brechomr-b3541.firebasestorage.app",
+  messagingSenderId: "365921344786",
+  appId: "1:365921344786:web:cb38a8419fff440c96a7cb"
 };
 
 const app = initializeApp(firebaseConfig);
