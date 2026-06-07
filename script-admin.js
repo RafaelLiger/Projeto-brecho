@@ -62,16 +62,22 @@ async function uploadImagem(file) {
   formData.append('image', file);
 
   try {
+    console.log('Upload ImgBB iniciado para arquivo:', file.name, file.type, file.size);
     const response = await fetch(
       'https://api.imgbb.com/1/upload?key=e4b3fc73837d99b25fd1a7c343149c2b',
       { method: 'POST', body: formData }
     );
-
     const data = await response.json();
-    
-    if (data.success) {
+
+    if (!response.ok) {
+      console.error('ImgBB response error:', response.status, response.statusText, data);
+      throw new Error(`Erro no upload da imagem: ${response.status} ${response.statusText}`);
+    }
+
+    if (data && data.success) {
       return data.data.url;
     } else {
+      console.error('ImgBB returned invalid response:', data);
       throw new Error('Erro ao fazer upload da imagem');
     }
   } catch (error) {
@@ -197,18 +203,27 @@ window.handleCadastro = async function(event) {
   btnCadastrar.innerHTML = '<span class="loading-spinner" style="display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; margin-right: 0.5rem;"></span>Enviando...';
 
   try {
+    const nomeColecao = 'produtos';
+    const produto = {
+      nome: nome,
+      preco: parseFloat(preco),
+      foto: '',
+      dataCriacao: new Date()
+    };
+
+    console.log('Produto:', produto);
+    console.log('Coleção:', nomeColecao);
+    console.log('Usuário:', auth.currentUser);
+    console.log('Projeto Firebase:', db.app.options.projectId);
+
     // Upload image
     showMessage('Enviando imagem...', 'success');
-    const urlFoto = await uploadImagem(fotoInput.files[0]);
+    produto.foto = await uploadImagem(fotoInput.files[0]);
 
     // Add product to Firestore
     showMessage('Salvando produto...', 'success');
-    await addDoc(collection(db, 'produtos'), {
-      nome: nome,
-      preco: parseFloat(preco),
-      foto: urlFoto,
-      dataCriacao: new Date()
-    });
+    console.log('Produto final:', produto);
+    await addDoc(collection(db, nomeColecao), produto);
 
     // Success
     showMessage(`✓ Produto "${nome}" cadastrado com sucesso!`, 'success');
@@ -223,7 +238,9 @@ window.handleCadastro = async function(event) {
 
   } catch (error) {
     console.error('Erro ao cadastrar produto:', error);
-    showMessage('Erro ao cadastrar produto. Tente novamente.', 'error');
+    console.error('Código:', error.code);
+    console.error('Mensagem:', error.message);
+    showMessage(`Erro ao cadastrar produto. ${error.message}`, 'error');
   } finally {
     // Re-enable button
     btnCadastrar.disabled = false;
