@@ -16,6 +16,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+console.log('Página admin carregada');
+console.log('Versão atual:', new Date().toISOString());
+
 // ==============================================
 // AUTHENTICATION VERIFICATION
 // ==============================================

@@ -14,6 +14,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+console.log('Página index carregada');
+console.log('Versão atual:', new Date().toISOString());
+
 // ==============================================
 // PRODUCTS LOADING FROM FIREBASE
 // ==============================================
@@ -158,7 +161,7 @@ if (contactForm) {
     }
 
     // Prepare email message
-    const assunto = "Mensagem do site Brechó Vavá";
+    const assunto = "Mensagem do site Brechó M.R";
     const corpo = `Nome: ${name}\nE-mail: ${email}\n\nMensagem:\n${message}`;
     const mailtoLink = `mailto:rafael-liger@outlook.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
     
