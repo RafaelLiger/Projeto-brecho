@@ -25,20 +25,30 @@ console.log('auth.currentUser inicial:', auth.currentUser);
 // ==============================================
 onAuthStateChanged(auth, (user) => {
   console.log('Auth state changed admin:', user);
+  console.log('CurrentUser (admin):', auth.currentUser);
   const adminPanel = document.getElementById('adminPanel');
-  
+
   if (user) {
+    console.log('Usuário autenticado:', user);
     // User is logged in
     adminPanel.style.display = 'block';
     document.getElementById('userEmail').textContent = user.email;
     const initial = user.email[0].toUpperCase();
     document.getElementById('userAvatar').textContent = initial;
-    
+
     // Load products
     carregarProdutos();
   } else {
-    // User is not logged in, redirect to login
-    window.location.href = 'login.html';
+    console.log('Nenhum usuário autenticado no momento. Aguardando antes de redirecionar...');
+    // Pequena espera para permitir que o estado de persistência se estabilize
+    setTimeout(() => {
+      if (!auth.currentUser) {
+        console.log('Redirecionando para login.html');
+        window.location.href = 'login.html';
+      } else {
+        console.log('Usuário tornou-se disponível após espera, não haverá redirecionamento.');
+      }
+    }, 500);
   }
 });
 
