@@ -18,11 +18,13 @@ const db = getFirestore(app);
 
 console.log('Página admin carregada');
 console.log('Versão atual:', new Date().toISOString());
+console.log('auth.currentUser inicial:', auth.currentUser);
 
 // ==============================================
 // AUTHENTICATION VERIFICATION
 // ==============================================
 onAuthStateChanged(auth, (user) => {
+  console.log('Auth state changed admin:', user);
   const adminPanel = document.getElementById('adminPanel');
   
   if (user) {

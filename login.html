@@ -260,6 +260,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
     import {
       getAuth,
+      setPersistence,
+      browserLocalPersistence,
       signInWithEmailAndPassword
     } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
@@ -308,8 +310,12 @@
       senhaInput.classList.add('input-loading');
 
       try {
+        console.log("Auth currentUser antes do login:", auth.currentUser);
+        await setPersistence(auth, browserLocalPersistence);
         console.log("Tentando login:", email);
-        await signInWithEmailAndPassword(auth, email, senha);
+        const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+        console.log('Login bem-sucedido', userCredential);
+        console.log('Auth currentUser após login:', auth.currentUser);
         
         showSuccess('Login realizado com sucesso!');
         
@@ -320,6 +326,8 @@
 
       } catch (error) {
         console.error('Erro ao fazer login:', error);
+        console.error('Código de erro:', error.code);
+        console.error('Mensagem de erro:', error.message);
 
         let mensagem = 'Erro ao fazer login. Tente novamente.';
         
@@ -334,6 +342,7 @@
         } else if (error.code === 'auth/too-many-requests') {
           mensagem = 'Muitas tentativas de login. Tente novamente mais tarde';
         }
+        console.log('Login erro final:', error.code, error.message);
 
         showError(mensagem);
 
